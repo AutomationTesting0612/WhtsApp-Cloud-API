@@ -1,0 +1,5 @@
+com\poc\whtsapp\message\controller\WhatsAppController.class
+com\poc\whtsapp\message\service\WhatsAppService.class
+com\poc\whtsapp\message\WhtsappMessagePocApplication.class
+com\poc\whtsapp\message\controller\LoginController.class
+com\poc\whtsapp\message\config\SecurityConfig.class
