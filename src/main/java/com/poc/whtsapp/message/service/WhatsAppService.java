@@ -1,8 +1,7 @@
-package com.poc.whtsapp.message.Whtsapp.Message.POC.service;
+package com.poc.whtsapp.message.service;
 
 
 import com.opencsv.CSVReader;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -10,8 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,20 +20,13 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class WhatsAppService {
 
-//    @Value("${whatsapp.token}")
-//    private String token;
-//
-//    @Value("${whatsapp.phone-id}")
-//    private String phoneId;
-//
-//    @Value("${whatsapp.api-url}")
-//    private String apiUrl;
-
     @Async
-    public CompletableFuture<ResponseEntity<List<String>>> sendTemplateMessage(String template, String languageCode, String token, String url, String templateType) {
+    public CompletableFuture<ResponseEntity<List<String>>> sendTemplateMessageFromFile(
+            String template, String languageCode, String token, String url, String templateType, MultipartFile file) {
+
         List<String> responses = new ArrayList<>();
 
-        try (CSVReader reader = new CSVReader(new FileReader("C:\\Users\\pc\\Documents\\Whtsapp-Message-POC\\users.csv"))) {
+        try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
             List<String[]> allRows = reader.readAll();
 
             if (!allRows.isEmpty()) {
@@ -46,7 +39,9 @@ public class WhatsAppService {
                     String phone = row[1].trim();
                     String imageUrl = row[2].trim();
 
-                    ResponseEntity<String> response = sendWhatsAppMessage(name, phone, imageUrl, template, languageCode, token, url, templateType);
+                    ResponseEntity<String> response = sendWhatsAppMessage(
+                            name, phone, imageUrl, template, languageCode, token, url, templateType
+                    );
                     responses.add("✅ " + phone + " → " + response.getStatusCode());
                 } else {
                     responses.add("⚠️ Malformed row skipped: " + String.join(",", row));

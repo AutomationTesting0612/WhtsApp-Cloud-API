@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Send WhatsApp Bulk Template</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            height: 100vh;
+            margin: 0;
+        }
+
+        .glass-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .form-label {
+            color: #f1f1f1;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+        }
+
+        .form-control::placeholder,
+        .form-select option {
+            color: #ddd;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .form-text {
+            color: #ccc;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            color: #0f5132;
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center justify-content-center">
+<div class="container">
+    <div class="card glass-card shadow-lg p-4 mt-5">
+        <div class="card-header text-white bg-transparent border-bottom-0 text-center mb-3">
+            <h3 class="mb-0">📤 Send Bulk WhatsApp Template</h3>
+        </div>
+        <div class="card-body">
+            <form id="templateForm" enctype="multipart/form-data" method="POST">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="template" class="form-label">Template Name</label>
+                        <input type="text" class="form-control" id="template" value="huda" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="code" class="form-label">Language Code</label>
+                        <input type="text" class="form-control" id="code" value="en" required>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="token" class="form-label">Access Token</label>
+                        <textarea class="form-control" id="token" rows="2" required>EAATSIOzlFv0BOw162mwy0TQNUp1pGYD1XchiJZBAz0d5QufvDioG8ohGePuu6OfQCDhZBa268qhdGAZA2SLxeZCosr4i3OlbZCsZBbYv0aT21UrWnHS7ecRR6ZAiRTrchTtOl1ZBzDLVMC5b1xl2cGr5VspaVFGDaS6tP3lVhvlLbox2ToI7L5awUEBrLk8mlAZDZD</textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="url" class="form-label">API URL</label>
+                        <input type="url" class="form-control" id="url" value="https://graph.facebook.com/v22.0/638958102643087/messages" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="templateType" class="form-label">Template Type</label>
+                        <select class="form-select" id="templateType">
+                            <option value="image" selected>Image</option>
+                            <option value="normal">Normal</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="csvFile" class="form-label">Upload CSV File</label>
+                        <input type="file" class="form-control" id="csvFile" accept=".csv" required>
+                        <div class="form-text">CSV must contain: name, phone number, image URL</div>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-success mt-3">🚀 Send Messages</button>
+                    </div>
+                </div>
+            </form>
+            <div class="mt-4" id="responseBox"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("templateForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("template", document.getElementById("template").value);
+        formData.append("code", document.getElementById("code").value);
+        formData.append("token", document.getElementById("token").value);
+        formData.append("url", document.getElementById("url").value);
+        formData.append("templateType", document.getElementById("templateType").value);
+        formData.append("file", document.getElementById("csvFile").files[0]);
+
+        const responseBox = document.getElementById("responseBox");
+        responseBox.innerHTML = `<div class="text-light">⏳ Sending messages, please wait...</div>`;
+
+        try {
+            const res = await fetch("/whatsapp/bulk-template", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await res.json();
+            responseBox.innerHTML = `<div class="alert alert-success mt-3"><strong>✅ Results:</strong><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+        } catch (err) {
+            responseBox.innerHTML = `<div class="alert alert-danger mt-3"><strong>❌ Error:</strong> ${err.message}</div>`;
+        }
+    });
+</script>
+</body>
+</html>

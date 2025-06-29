@@ -1,4 +1,4 @@
-package com.poc.whtsapp.message.Whtsapp.Message.POC;
+package com.poc.whtsapp.message.POC;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
