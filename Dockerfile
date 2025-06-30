@@ -1,9 +1,12 @@
-
-FROM openjdk:17-jdk-slim-buster 
-LABEL maintainer="akhil.sharma0612@gmail.com"
-
+# 🛠️ Build Stage
+FROM maven:3.8.5-openjdk-17 AS build
+WORKDIR /app
+COPY . .
 RUN mvn clean package -DskipTests
 
-COPY --from=build /target/Whtsapp-Message-POC-0.0.1-SNAPSHOT.jar Whtsapp-Message-POC-0.0.1-SNAPSHOT.jar
+# 🚀 Runtime Stage
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/Whtsapp-Message-POC-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","Whtsapp-Message-POC-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
