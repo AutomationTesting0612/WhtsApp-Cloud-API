@@ -2,11 +2,8 @@
 FROM openjdk:17-jdk-slim-buster 
 LABEL maintainer="akhil.sharma0612@gmail.com"
 
-COPY ./target/Whtsapp-Message-POC-0.0.1-SNAPSHOT.jar /home/Whtsapp-Message-POC-0.0.1-SNAPSHOT.jar
+RUN mvn clean package -DskipTests
 
-# Copy the startup script
-COPY startup.sh /home/startup.sh
-RUN chmod +x /home/startup.sh
-
-# Run the script as the container's command
-CMD ["/home/startup.sh"]
+COPY --from=build /target/Whtsapp-Message-POC-0.0.1-SNAPSHOT.jar Whtsapp-Message-POC-0.0.1-SNAPSHOT.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","Whtsapp-Message-POC-0.0.1-SNAPSHOT.jar"]
