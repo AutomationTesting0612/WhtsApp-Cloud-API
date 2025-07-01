@@ -10,4 +10,6 @@ public class LoginController {
     public String loginPage() {
         return "login"; // Thymeleaf will render login.html from /templates
     }
+
+
 }

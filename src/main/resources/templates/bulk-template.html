@@ -127,6 +127,12 @@
                 method: "POST",
                 body: formData
             });
+            if (res.ok) {
+    window.location.href = "/webhook/status";
+} else {
+    const errorText = await res.text();
+    responseBox.innerHTML = `<div class="alert alert-danger mt-3"><strong>❌ Error:</strong> ${errorText}</div>`;
+}
 
             const data = await res.json();
             responseBox.innerHTML = `<div class="alert alert-success mt-3"><strong>✅ Results:</strong><pre>${JSON.stringify(data, null, 2)}</pre></div>`;

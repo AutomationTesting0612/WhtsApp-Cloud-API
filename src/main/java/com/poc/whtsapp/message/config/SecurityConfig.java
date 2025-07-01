@@ -20,6 +20,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/login", "/error").permitAll()
+                        .requestMatchers("/webhook").permitAll()
+                        .requestMatchers("/whatsapp/bulk-template").permitAll() // ✅ allow open access
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -31,9 +33,13 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 )
-                .csrf(Customizer.withDefaults()); // Enables CSRF protection (recommended)
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/whatsapp/bulk-template")
+                        .ignoringRequestMatchers("/webhook")// ✅ skip CSRF for API
+                );
         return http.build();
     }
+
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
