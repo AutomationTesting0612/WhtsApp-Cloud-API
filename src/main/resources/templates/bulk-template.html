@@ -134,7 +134,7 @@
                 body: formData
             });
             if (res.ok) {
-    window.location.href = "/webhook";
+    window.location.href = "/webhook/view";
 } else {
     const errorText = await res.text();
     responseBox.innerHTML = `<div class="alert alert-danger mt-3"><strong>❌ Error:</strong> ${errorText}</div>`;
