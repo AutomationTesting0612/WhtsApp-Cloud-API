@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/webhook")
 public class WhatsAppWebhookController {
 
 
@@ -56,7 +55,7 @@ public class WhatsAppWebhookController {
         }
     }
 
-    @GetMapping("/status")
+    @GetMapping("/webhook")
     public String viewMessageStatus(Model model) {
         model.addAttribute("messages", repository.findAll());
         return "message_status";
