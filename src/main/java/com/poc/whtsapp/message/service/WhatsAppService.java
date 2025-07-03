@@ -78,8 +78,7 @@ public class WhatsAppService {
                                     Map.of(
                                             "type", "body",
                                             "parameters", List.of(
-                                                    Map.of("type", "text", "text", name),
-                                                    Map.of("type", "text", "text", "https://www.instagram.com/hudaonline.in")
+                                                    Map.of("type", "text", "text", name)
                                             )
                                     )
                             )
