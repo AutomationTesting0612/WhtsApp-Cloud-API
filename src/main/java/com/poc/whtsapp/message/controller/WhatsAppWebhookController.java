@@ -1,5 +1,6 @@
 package com.poc.whtsapp.message.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.poc.whtsapp.message.dto.WebhookPayload;
 import com.poc.whtsapp.message.entity.MessageStatus;
 import com.poc.whtsapp.message.repository.MessageStatusRepository;
@@ -30,6 +31,11 @@ public class WhatsAppWebhookController {
                             .status(status.status)
                             .timestamp(status.timestamp)
                             .build();
+                    try {
+                        System.out.println("📦 Payload: " + new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(payload));
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
 
                     if (status.errors != null && !status.errors.isEmpty()) {
                         msg.setErrorReason(status.errors.get(0).get("code") + " - " + status.errors.get(0).get("title"));
@@ -49,7 +55,9 @@ public class WhatsAppWebhookController {
             @RequestParam("hub.challenge") String challenge) {
 
         String VERIFY_TOKEN = "meatyhamhock";
+
         if ("subscribe".equals(mode) && VERIFY_TOKEN.equals(verifyToken)) {
+
             return ResponseEntity.ok(challenge);
         } else {
             return ResponseEntity.status(403).body("Verification failed");
