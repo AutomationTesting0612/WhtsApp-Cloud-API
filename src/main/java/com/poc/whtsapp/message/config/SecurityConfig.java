@@ -20,13 +20,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/login", "/error").permitAll()
-                        .requestMatchers("/webhook").permitAll()
-                        .requestMatchers("/whatsapp/bulk-template").permitAll() // ✅ allow open access
+                        .requestMatchers("/webhook", "/whatsapp/bulk-template").permitAll() // APIs open if needed
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/whatsapp/bulk-template-form", true)
+                        .defaultSuccessUrl("/dashboard", true) // Redirect to dashboard after login
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -34,12 +33,11 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/whatsapp/bulk-template")
-                        .ignoringRequestMatchers("/webhook")// ✅ skip CSRF for API
+                        .ignoringRequestMatchers("/whatsapp/bulk-template", "/webhook")
                 );
+
         return http.build();
     }
-
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
