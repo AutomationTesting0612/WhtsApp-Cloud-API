@@ -63,27 +63,36 @@
 <body class="d-flex align-items-center justify-content-center">
 <div class="container">
     <div class="card glass-card shadow-lg p-4 mt-5">
-        <div class="card-header text-white bg-transparent border-bottom-0 text-center mb-3">
-            <h3 class="mb-0">📤 Send Bulk WhatsApp Template</h3>
+        <div class="card-header text-white bg-transparent border-bottom-0 mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <h3 class="mb-0">📤 Send Bulk WhatsApp Template</h3>
+                <div class="d-flex gap-2">
+                    <a href="/whatsapp/dashboard" class="btn btn-success mt-3">🔙 Back to Dashboard</a>
+                <form th:action="@{/logout}" method="post" class="mb-0">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="btn btn-success mt-3">🚀 Logout</button>
+                </form>
+            </div>
+            </div>
         </div>
         <div class="card-body">
             <form id="templateForm" enctype="multipart/form-data" method="POST">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="template" class="form-label">Template Name</label>
-                        <input type="text" class="form-control" id="template" value="huda" required>
+                        <input type="text" class="form-control" id="template" placeholder="Enter template name" required>
                     </div>
                     <div class="col-md-6">
                         <label for="code" class="form-label">Language Code</label>
-                        <input type="text" class="form-control" id="code" value="en" required>
+                        <input type="text" class="form-control" id="code" placeholder="Enter language code (e.g. en, en_US)" required>
                     </div>
                     <div class="col-md-12">
                         <label for="token" class="form-label">Access Token</label>
-                        <textarea class="form-control" id="token" rows="2" required>EAATSIOzlFv0BOw162mwy0TQNUp1pGYD1XchiJZBAz0d5QufvDioG8ohGePuu6OfQCDhZBa268qhdGAZA2SLxeZCosr4i3OlbZCsZBbYv0aT21UrWnHS7ecRR6ZAiRTrchTtOl1ZBzDLVMC5b1xl2cGr5VspaVFGDaS6tP3lVhvlLbox2ToI7L5awUEBrLk8mlAZDZD</textarea>
+                        <textarea class="form-control" id="token" rows="2" placeholder="Enter your access token" required></textarea>
                     </div>
                     <div class="col-md-6">
                         <label for="url" class="form-label">API URL</label>
-                        <input type="url" class="form-control" id="url" value="https://graph.facebook.com/v22.0/638958102643087/messages" required>
+                        <input type="url" class="form-control" id="url" placeholder="Enter API URL" required>
                     </div>
                     <div class="col-md-6">
                         <label for="templateType" class="form-label">Template Type</label>
@@ -128,7 +137,7 @@
                 body: formData
             });
             if (res.ok) {
-    window.location.href = "/webhook/status";
+    window.location.href = "/webhook/view";
 } else {
     const errorText = await res.text();
     responseBox.innerHTML = `<div class="alert alert-danger mt-3"><strong>❌ Error:</strong> ${errorText}</div>`;

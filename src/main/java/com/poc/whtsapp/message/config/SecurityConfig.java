@@ -21,12 +21,13 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/login", "/error").permitAll()
                         .requestMatchers("/webhook").permitAll()
-                        .requestMatchers("/whatsapp/bulk-template").permitAll() // ✅ allow open access
+                        .requestMatchers("/whatsapp/bulk-template").permitAll()
+                        .requestMatchers("/whatsapp/extract").permitAll()// ✅ allow open access
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/whatsapp/bulk-template-form", true)
+                        .defaultSuccessUrl("/whatsapp/dashboard", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -35,6 +36,7 @@ public class SecurityConfig {
                 )
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/whatsapp/bulk-template")
+                        .ignoringRequestMatchers("/whatsapp/extract")
                         .ignoringRequestMatchers("/webhook")// ✅ skip CSRF for API
                 );
         return http.build();

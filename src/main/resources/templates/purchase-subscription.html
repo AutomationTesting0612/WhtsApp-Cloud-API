@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Purchase Subscription</title>
+</head>
+<body>
+<h2>Choose Your Plan</h2>
+
+<form method="post" th:action="@{/subscription/upgrade}">
+    <!-- ✅ CSRF Token Required -->
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+    <p>Subscribe to <strong>Premium Plan</strong> for 1 month</p>
+    <button type="submit">Subscribe Now</button>
+</form>
+
+<br>
+<a href="/subscription/subscription-status">Back to Subscription Status</a>
+</body>
+</html>

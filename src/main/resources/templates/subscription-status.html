@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscription Status</title>
+</head>
+<body>
+<h2>Subscription Status</h2>
+
+<div th:if="${subscription != null}">
+    <p><strong>Plan:</strong> <span th:text="${subscription.plan}"></span></p>
+    <p><strong>Start Date:</strong> <span th:text="${subscription.startDate}"></span></p>
+    <p><strong>End Date:</strong> <span th:text="${subscription.endDate}"></span></p>
+    <p><strong>Status:</strong>
+        <span th:if="${subscription.active}" style="color:green;">Active</span>
+        <span th:if="${!subscription.active}" style="color:red;">Inactive</span>
+    </p>
+</div>
+
+<div th:if="${subscription == null}">
+    <p>No subscription found.</p>
+
+    <form method="post" th:action="@{/subscription/upgrade}">
+<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+        <button type="submit">Purchase Subscription</button>
+    </form>
+</div>
+
+<a href="/whatsapp/dashboard">Back to Dashboard</a>
+</body>
+</html>
